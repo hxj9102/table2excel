@@ -123,21 +123,21 @@ const tableToNotIE = (function () {
 })()
 
 // 导出函数
-const export2Excel = (theadData, tbodyData, excelName) => {
+const table2excel = (column, data, excelName) => {
 	const typeMap = {
 		image: getImageHtml,
 		text: getTextHtml
 	}
 
-	let thead = theadData.reduce((result, item) => {
+	let thead = column.reduce((result, item) => {
 		result += `<th>${item.title}</th>`
 		return result
 	}, '')
 
 	thead = `<thead><tr>${thead}</tr></thead>`
 
-	let tbody = tbodyData.reduce((result, row) => {
-		const temp = theadData.reduce((tds, col) => {
+	let tbody = data.reduce((result, row) => {
+		const temp = column.reduce((tds, col) => {
 			tds += typeMap[col.type || 'text'](row[col.key], col)
 			return tds
 		}, '')
@@ -152,14 +152,14 @@ const export2Excel = (theadData, tbodyData, excelName) => {
 	// 导出表格
 	exportToExcel(table, excelName)
 
-	function getTextHtml(data) {
-		return `<td style="text-align: center">${data}</td>`
+	function getTextHtml(val) {
+		return `<td style="text-align: center">${val}</td>`
 	}
 
-	function getImageHtml(data, options) {
+	function getImageHtml(val, options) {
 		options = Object.assign({width: 40, height: 60}, options)
-		return `<td style="width: ${options.width}px; height: ${options.height}px; text-align: center; vertical-align: middle"><img src="${data}" width=${options.width} height=${options.height}></td>`
+		return `<td style="width: ${options.width}px; height: ${options.height}px; text-align: center; vertical-align: middle"><img src="${val}" width=${options.width} height=${options.height}></td>`
 	}
 }
 
-export default export2Excel
+export default table2excel
