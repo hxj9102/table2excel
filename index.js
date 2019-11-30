@@ -102,7 +102,7 @@ const tableToNotIE = (function () {
 			table
 		}
 
-		const url = uri + base64(format(template, ctx)) + base64(format(template, ctx));
+		const url = uri + base64(format(template, ctx));
 
 		if (navigator.userAgent.indexOf("Firefox") > -1){
 			window.location.href = url

@@ -53,5 +53,5 @@ table2excel(column, data, excelName)
 
 ```
 text: defalut
-image: only accept start with http or https
+image: only accept start with http or https, and it can set image width and height
 ```
