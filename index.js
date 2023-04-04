@@ -25,13 +25,13 @@ const getExplorer = () => {
 	}
 }
 // 判断浏览器是否为IE
-const exportToExcel = (data, name) => {
+const exportToExcel = (data, name, type) => {
 
 	// 判断是否为IE
 	if (getExplorer() == 'ie') {
-		tableToIE(data, name)
+		tableToIE(data, name, type)
 	} else {
-		tableToNotIE(data, name)
+		tableToNotIE(data, name, type)
 	}
 }
 
@@ -40,7 +40,7 @@ const Cleanup = () => {
 }
 
 // ie浏览器下执行
-const tableToIE = (data, name) => {
+const tableToIE = (data, name, type) => {
 	let curTbl = data;
 	let oXL = new ActiveXObject("Excel.Application");
 
@@ -62,8 +62,10 @@ const tableToIE = (data, name) => {
 	oXL.Visible = true;
 	//设置excel可见属性
 
+	let fname = ''
+
 	try {
-		let fname = oXL.Application.GetSaveAsFilename("Excel.xls", "Excel Spreadsheets (*.xls), *.xls");
+		fname = oXL.Application.GetSaveAsFilename(`${name}.${type}`);
 	} catch (e) {
 		print("Nested catch caught " + e);
 	} finally {
@@ -96,7 +98,7 @@ const tableToNotIE = (function () {
 			})
 	}
 
-	return (table, name) => {
+	return (table, name, type) => {
 		const ctx = {
 			worksheet: name,
 			table
@@ -109,7 +111,7 @@ const tableToNotIE = (function () {
 		} else {
 			const aLink = document.createElement('a');
 			aLink.href = url;
-			aLink.download = name || '';
+			aLink.download = `${name}.${type}` || '';
 			let event;
 			if (window.MouseEvent) {
 				event = new MouseEvent('click');
@@ -123,7 +125,7 @@ const tableToNotIE = (function () {
 })()
 
 // 导出函数
-const table2excel = (column, data, excelName) => {
+const table2excel = (column, data, excelName, fileType = 'xls') => {
 	const typeMap = {
 		image: getImageHtml,
 		text: getTextHtml
@@ -135,10 +137,11 @@ const table2excel = (column, data, excelName) => {
 	}, '')
 
 	thead = `<thead><tr>${thead}</tr></thead>`
-
-	let tbody = data.reduce((result, row) => {
+	let tbody = data.reduce((result, row, index) => {
+		let tempStr = ''
 		const temp = column.reduce((tds, col) => {
-			tds += typeMap[col.type || 'text'](row[col.key], col)
+			tempStr = col.key === 'index' ? typeMap['text'](index + 1, col) : typeMap[col.type || 'text'](row[col.key], col)
+			tds += tempStr
 			return tds
 		}, '')
 		result += `<tr>${temp}</tr>`
@@ -150,10 +153,10 @@ const table2excel = (column, data, excelName) => {
 	const table = thead + tbody
 
 	// 导出表格
-	exportToExcel(table, excelName)
+	exportToExcel(table, excelName, fileType)
 
 	function getTextHtml(val) {
-		return `<td style="text-align: center">${val}</td>`
+		return `<td style="text-align: center">${val || ''}</td>`
 	}
 
 	function getImageHtml(val, options) {
