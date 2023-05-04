@@ -124,6 +124,15 @@ const tableToNotIE = (function () {
 
 // 导出函数
 const table2excel = (column, data, excelName) => {
+	function getTextHtml(val) {
+		return `<td style="text-align: center">${val}</td>`
+	}
+
+	function getImageHtml(val, options) {
+		options = Object.assign({width: 40, height: 60}, options)
+		return `<td style="width: ${options.width}px; height: ${options.height}px; text-align: center; vertical-align: middle"><img src="${val}" width=${options.width} height=${options.height}></td>`
+	}
+
 	const typeMap = {
 		image: getImageHtml,
 		text: getTextHtml
@@ -138,10 +147,25 @@ const table2excel = (column, data, excelName) => {
 
 	let tbody = data.reduce((result, row) => {
 		const temp = column.reduce((tds, col) => {
-			tds += typeMap[col.type || 'text'](row[col.key], col)
+			const options = {}
+
+			if (col.type === 'image') {
+				if (row.size) {
+					options.width = row.size[0]
+					options.height = row.size[1]
+				} else {
+					col.width && (options.width = col.width)
+					col.height && (options.height = col.height)
+				}
+			}
+
+			tds += typeMap[col.type || 'text'](row[col.key], options)
+
 			return tds
 		}, '')
+
 		result += `<tr>${temp}</tr>`
+
 		return result
 	}, '')
 
@@ -151,15 +175,6 @@ const table2excel = (column, data, excelName) => {
 
 	// 导出表格
 	exportToExcel(table, excelName)
-
-	function getTextHtml(val) {
-		return `<td style="text-align: center">${val}</td>`
-	}
-
-	function getImageHtml(val, options) {
-		options = Object.assign({width: 40, height: 60}, options)
-		return `<td style="width: ${options.width}px; height: ${options.height}px; text-align: center; vertical-align: middle"><img src="${val}" width=${options.width} height=${options.height}></td>`
-	}
 }
 
 export default table2excel
