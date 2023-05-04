@@ -13,45 +13,38 @@ npm install js-table2excel
 import table2excel from 'js-table2excel'
 
 const column = [
-	{
-		title: 'Name',
-		key: 'name',
-		type: 'text'
-	},
-	{
-		title: 'Pic',
-		key: 'pic',
-		type: 'image',
-		width: 80,
-		height: 50
-	}
+  {
+    title: '宠物',
+    key: 'name',
+  },
+  {
+    title: '图例',
+    key: 'pic',
+    type: 'image',
+  }
 ]
+
 const data = [
-	{
-		name: 'xiao',
-		age: '18',
-		pic: ''
-	},
-	{
-		name: 'jie',
-		age: '18',
-		pic: ''
-	}
+  {
+    name: 'dog',
+    pic: 'https://t7.baidu.com/it/u=848096684,3883475370&fm=193&f=GIF',
+    size: [100, 60], // image size for picture
+  },
+  {
+    name: 'cat',
+    pic: 'https://t7.baidu.com/it/u=2272690563,768132477&fm=193&f=GIF',
+  }
 ]
-const excelName = 'boy'
+
+const excelName = '爱宠'
 
 table2excel(column, data, excelName)
 
 ```
-### Introduction
+### column options
 
-* title: name for column
-
-* key: key for column
-
-* type: 
-
-```
-text: defalut
-image: only accept start with http or https, and it can set image width and height
-```
+|       | introduction    | type   | default |
+| ----- | --------------- | ------ | ------- |
+| title | name for column | String |         |
+| key   | key for column  | String |         |
+| type  | text\|image     | String | text    |
