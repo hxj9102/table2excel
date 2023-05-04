@@ -38,13 +38,32 @@ const data = [
 
 const excelName = '爱宠'
 
-table2excel(column, data, excelName)
+const captionName = '爱宠一览图'
 
+table2excel({
+    column,
+    data,
+    excelName,
+    captionName: '爱宠列表',
+})
+// you can also use
+// table2excel(column, data, excelName, captionName)
 ```
+### table2excel options
+
+|             | type   | default |
+| ----------- | ------ | ------- |
+| column      | Array  | []      |
+| data        | Array  | []      |
+| excelName   | String | -       |
+| captionName | String | -       |
+
+
+
 ### column options
 
 |       | introduction    | type   | default |
 | ----- | --------------- | ------ | ------- |
-| title | name for column | String |         |
-| key   | key for column  | String |         |
+| title | name for column | String | -       |
+| key   | key for column  | String | -       |
 | type  | text\|image     | String | text    |

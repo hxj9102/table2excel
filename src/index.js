@@ -122,8 +122,21 @@ const tableToNotIE = (function () {
 	}
 })()
 
+const resolveOptions = (options) => {
+	if (options.length === 1) {
+		return options[0]
+	}
+
+	return {
+		column: options[0] || [],
+		data: options[1] || [],
+		excelName: options[2] || '',
+		captionName: options[3],
+	}
+}
+
 // 导出函数
-const table2excel = (column, data, excelName) => {
+const table2excel = (...options) => {
 	function getTextHtml(val) {
 		return `<td style="text-align: center">${val}</td>`
 	}
@@ -137,6 +150,15 @@ const table2excel = (column, data, excelName) => {
 		image: getImageHtml,
 		text: getTextHtml
 	}
+
+	const {
+		column,
+		data,
+		excelName,
+		captionName,
+	} = resolveOptions(options)
+
+	let caption = captionName ? `<caption style="font-weight:bold">${captionName}</caption>` : '';
 
 	let thead = column.reduce((result, item) => {
 		result += `<th>${item.title}</th>`
@@ -171,7 +193,7 @@ const table2excel = (column, data, excelName) => {
 
 	tbody = `<tbody>${tbody}</tbody>`
 
-	const table = thead + tbody
+	const table = caption + thead + tbody
 
 	// 导出表格
 	exportToExcel(table, excelName)

@@ -45,6 +45,8 @@ const data = [
 
 const excelName = '爱宠'
 
+const captionName = '爱宠一览图'
+
 export default {
   data () {
     return {
@@ -54,7 +56,14 @@ export default {
   },
   methods: {
     toExcel () {
-      table2excel(column, data, excelName)
+      table2excel({
+        column,
+        data,
+        excelName,
+        captionName,
+      })
+      // you can also use
+      // table2excel(column, data, excelName, captionName)
     },
     change (key, e) {
       this[key] = JSON.parse(e.target.value)
