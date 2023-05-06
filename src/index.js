@@ -143,7 +143,7 @@ const table2excel = (...options) => {
 
 	function getImageHtml(val, options) {
 		options = Object.assign({width: 40, height: 60}, options)
-		return `<td style="width: ${options.width}px; height: ${options.height}px; text-align: center; vertical-align: middle"><img src="${val}" width=${options.width} height=${options.height}></td>`
+		return `<td style="width: ${options.width}px; height: ${options.height}px; text-align: center; vertical-align: middle"><img src="${val}" width=${ options.width * .99 } height=${ options.height * .99 } /></td>`
 	}
 
 	const typeMap = {
