@@ -4,13 +4,11 @@ const pkg = require('./package.json')
 
 export default {
     input: 'src/index.js',
-    inlineDynamicImports: true,
     output: [{
-        inlineDynamicImports: true,
         dir: 'dist',
-        entryFileNames: '[name].js',
         format: 'umd',
-        name: 'Table2Excel',
+        entryFileNames: '[name].js',
+        name: 'Workbook',
         banner: `
 /*!
  * ${pkg.name} v${pkg.version}

@@ -1,73 +1,54 @@
 <template>
   <div id="app">
-    <h3>column</h3>
-    <textarea @input="change('column', $event)">
-      {{ column }}
-    </textarea>
-
-    <h3>data</h3>
-    <textarea @input="change('data', $event)">
-      {{ data }}
-    </textarea>
-
     <button @click="toExcel">生成excel</button>
   </div>
 </template>
 
 <script>
-import table2excel from '../../src'
+import Workbook from '../../src'
 
-const column = [
-  {
-    title: '宠物',
-    key: 'name',
-  },
-  {
-    title: '图例',
-    key: 'pic',
-    type: 'image',
-    width: 200,
-    height: 120,
-  }
+const columns = [
+  { header: 'Id', key: 'id', alignment: { vertical: 'middle', horizontal: 'center' } },
+  { header: 'Name', key: 'name' },
+  { header: 'D.O.B.', key: 'dob', width: 15 },
+  { header: 'Pic.', key: 'pic', type: 'image', width: 20, height: 60 },
 ]
 
-const data = [
-  {
-    name: 'dog',
+// const columns = [
+//   { header: 'Id', key: 'id', alignment: { vertical: 'middle', horizontal: 'center' } },
+//   { header: 'Name', key: 'name' },
+//   { header: 'D.O.B.', key: 'dob', width: 15 },
+//   { header: 'Pic.', key: 'pic' },
+// ]
+
+const values = new Array(10).fill({}).map(() => {
+  return {
+    id: 13,
+    name: 'Thing 1',
+    dob: new Date(),
     pic: 'https://t7.baidu.com/it/u=848096684,3883475370&fm=193&f=GIF',
-    size: [100, 60],
-  },
-  {
-    name: 'cat',
-    pic: 'https://t7.baidu.com/it/u=2272690563,768132477&fm=193&f=GIF',
   }
-]
-
-const excelName = '爱宠'
-
-const captionName = '爱宠一览图'
+})
 
 export default {
   data () {
     return {
-      column,
-      data,
     }
   },
   methods: {
-    toExcel () {
-      table2excel({
-        column,
-        data,
-        excelName,
-        captionName,
+    async toExcel () {
+      const workbook = new Workbook()
+
+      await workbook.addSheet({
+        sheetName: 'mySheet',
+        columns,
+        values,
       })
-      // you can also use
-      // table2excel(column, data, excelName, captionName)
+
+      await workbook.toExcel('my-excel.xlsx')
+
+      console.log('success')
     },
-    change (key, e) {
-      this[key] = JSON.parse(e.target.value)
-    }
   },
 }
 </script>
